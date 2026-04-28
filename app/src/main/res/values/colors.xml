@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FFFF0000</color>
+    <color name="primary_blue">#0056D2</color>
+    <color name="secondary_blue">#E3F2FD</color>
+    <color name="accent_orange">#FF7043</color>
+    <color name="success_green">#4CAF50</color>
+    <color name="gray_text">#666666</color>
+    <color name="light_gray_bg">#F8FAFD</color>
+    <color name="divider_color">#EEEEEE</color>
+</resources>
