@@ -2,6 +2,7 @@ package com.example.budget_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -9,12 +10,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class activity_login : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
     private lateinit var emailEditText: TextInputEditText
     private lateinit var passwordEditText: TextInputEditText
+    
+    private val TAG = "LoginActivity"
+    private val DB_URL = "https://budgetapp2-6ab44-default-rtdb.europe-west1.firebasedatabase.app"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +28,9 @@ class activity_login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+        // Initialize Database with correct URL immediately on login screen
+        database = FirebaseDatabase.getInstance(DB_URL)
+
         emailEditText = findViewById(R.id.loginEmail)
         passwordEditText = findViewById(R.id.PasswordLogin)
 
@@ -30,6 +39,7 @@ class activity_login : AppCompatActivity() {
         val tvForgotPassword: TextView = findViewById(R.id.tvForgotPassword)
 
         btnLogin.setOnClickListener {
+            Log.d(TAG, "Login button clicked")
             loginUser()
         }
 
@@ -38,7 +48,6 @@ class activity_login : AppCompatActivity() {
         }
 
         tvForgotPassword.setOnClickListener {
-            // Implementation for forgot password
             val email = emailEditText.text.toString().trim()
             if (email.isEmpty()) {
                 Toast.makeText(this, "Enter your email to reset password", Toast.LENGTH_SHORT).show()
@@ -64,6 +73,8 @@ class activity_login : AppCompatActivity() {
             return
         }
 
+        Toast.makeText(this, "Authenticating...", Toast.LENGTH_SHORT).show()
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -72,6 +83,7 @@ class activity_login : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
+                    Log.e(TAG, "Login failed", task.exception)
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }

@@ -10,4 +10,17 @@
     <color name="gray_text">#666666</color>
     <color name="light_gray_bg">#F8FAFD</color>
     <color name="divider_color">#EEEEEE</color>
+
+    <!-- Neo-brutalism/Soft UI hybrid colors -->
+    <color name="vibrant_purple">#7C4DFF</color>
+    <color name="vibrant_purple_dark">#6200EA</color>
+    <color name="neon_pink">#FF4081</color>
+    <color name="muted_grey">#9E9E9E</color>
+    <color name="soft_cream">#F5F5DC</color>
+
+    <!-- Dark Mode Colors -->
+    <color name="dark_gray_bg">#121212</color>
+    <color name="dark_card_bg">#1E1E1E</color>
+    <color name="dark_text_primary">#E1E1E1</color>
+    <color name="dark_text_secondary">#B0B0B0</color>
 </resources>

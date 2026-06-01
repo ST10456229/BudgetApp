@@ -1,252 +1,443 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray_bg"
-    tools:openDrawer="start">
+    android:background="?android:attr/windowBackground">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/main_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/main_scroll_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:padding="20dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- Top Header -->
+            <TextView
+                android:id="@+id/tvGreeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/hello_user"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/ivProfile"
+                app:layout_constraintEnd_toStartOf="@id/ivProfile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivProfile" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.LargeComponent"
+                android:contentDescription="@string/profile" />
+
+            <!-- Main Balance Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvMainBalance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:layout_marginTop="24dp"
+                app:cardBackgroundColor="@color/primary_blue"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="8dp"
+                app:layout_constraintTop_toBottomOf="@id/ivProfile"
+                app:strokeWidth="0dp">
 
-                <!-- Header Section -->
-                <ImageView
-                    android:id="@+id/ivMenu"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:padding="4dp"
-                    android:src="@android:drawable/ic_menu_sort_by_size"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/primary_blue" />
-
-                <TextView
-                    android:id="@+id/tvAppName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BudgetTracker"
-                    android:textColor="@color/primary_blue"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/ivMenu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/ivMenu" />
-
-                <!-- Profile placeholder -->
-                <ImageView
-                    android:id="@+id/ivProfile"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/primary_blue" />
-
-                <!-- Overview/Chart Card -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvOverview"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvAppName">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Spending Overview"
-                            android:textColor="@color/gray_text"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/pieChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="250dp"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Navigation Tabs -->
-                <LinearLayout
-                    android:id="@+id/llTabs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cvOverview">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvAccountsTab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="Accounts"
-                            android:textColor="@color/primary_blue"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="40dp"
-                            android:layout_height="3dp"
-                            android:background="@color/primary_blue" />
-                    </LinearLayout>
+                    android:padding="24dp">
 
                     <TextView
-                        android:id="@+id/tvBudgetTab"
+                        android:id="@+id/tvCurrencyLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:padding="8dp"
-                        android:text="Budgets &amp; Goals"
-                        android:textColor="@color/gray_text"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="@string/total_balance"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTotalBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/default_amount"
+                        android:textColor="@color/white"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCurrencyLabel" />
+
+                    <TextView
+                        android:id="@+id/tvLastUpdated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/last_updated_now"
+                        android:textColor="#99FFFFFF"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvTotalBalance" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quick Actions -->
+            <LinearLayout
+                android:id="@+id/llQuickActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                app:layout_constraintTop_toBottomOf="@id/cvMainBalance">
+
+                <LinearLayout
+                    android:id="@+id/btnHistory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardCornerRadius="28dp"
+                        app:cardElevation="2dp"
+                        app:strokeColor="?attr/strokeColor"
+                        app:strokeWidth="1dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_history"
+                            app:tint="@color/primary_blue"
+                            android:contentDescription="@string/history" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/history"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Accounts Row -->
-                <HorizontalScrollView
-                    android:id="@+id/hsvAccounts"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/btnAddAccountAction"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:scrollbars="none"
-                    app:layout_constraintTop_toBottomOf="@id/llTabs">
-
-                    <LinearLayout
-                        android:id="@+id/llAccountContainer"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardCornerRadius="28dp"
+                        app:cardElevation="2dp"
+                        app:strokeColor="?attr/strokeColor"
+                        app:strokeWidth="1dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add"
+                            app:tint="@color/primary_blue"
+                            android:contentDescription="@string/add_account_title" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="8dp"
+                        android:text="@string/add_account_title"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_add_account_main"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="+ Add Account"
-                            android:textColor="@color/primary_blue"
-                            app:icon="@android:drawable/ic_input_add"
-                            app:iconTint="@color/primary_blue" />
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-                <!-- Main Action Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_track_spending_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="24dp"
-                    android:backgroundTint="@color/primary_blue"
-                    android:text="Track New Expense"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="12dp"
-                    app:icon="@android:drawable/ic_menu_add"
-                    app:layout_constraintTop_toBottomOf="@id/hsvAccounts" />
-
-                <!-- Recent Transactions -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvExpenses"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/btnAccounts"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:layout_constraintTop_toBottomOf="@id/btn_track_spending_main">
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardCornerRadius="28dp"
+                        app:cardElevation="2dp"
+                        app:strokeColor="?attr/strokeColor"
+                        app:strokeWidth="1dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_categories"
+                            app:tint="@color/primary_blue"
+                            android:contentDescription="@string/your_accounts" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/your_accounts"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnMoreAction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardCornerRadius="28dp"
+                        app:cardElevation="2dp"
+                        app:strokeColor="?attr/strokeColor"
+                        app:strokeWidth="1dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_reports"
+                            app:tint="@color/primary_blue"
+                            android:contentDescription="@string/more" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/more"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Budget & Goals Summary Section -->
+            <LinearLayout
+                android:id="@+id/llBudgetGoals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                app:layout_constraintTop_toBottomOf="@id/llQuickActions">
+
+                <!-- Budget Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvBudget"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/primary_blue"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:padding="16dp">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Recent Transactions"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvSeeAll"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:text="See All"
-                                android:textColor="@color/primary_blue"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-                        </RelativeLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvRecentTransactions"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:minHeight="150dp"
-                            tools:listitem="@layout/transaction_item" />
+                            android:layout_marginTop="12dp"
+                            android:text="@string/my_budget"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvBudgetAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/default_amount"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+                <!-- Goals Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvGoals"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="?attr/strokeColor"
+                    app:strokeWidth="1dp">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-    <!-- Drawer Navigation (Stylized) -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/savings_goals"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvGoalsAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/default_amount"
+                            android:textColor="@color/primary_blue"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Savings Goals Section -->
+            <TextView
+                android:id="@+id/tvGoalsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/savings_goals"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llBudgetGoals" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGoals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tvGoalsTitle" />
+
+            <!-- Recent Transactions Section -->
+            <TextView
+                android:id="@+id/tvRecentTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/recent_transactions"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvGoals" />
+
+            <TextView
+                android:id="@+id/tvSeeAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/see_all"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tvRecentTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvRecentTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecentTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tvRecentTitle"
+                tools:listitem="@layout/transaction_item" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="?attr/colorSurface"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="24dp"
+        app:fabCradleVerticalOffset="12dp"
+        app:elevation="16dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:itemIconTint="@color/primary_blue"
+            app:itemTextColor="@color/primary_blue"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_menu" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/drawer_menu"
-        app:itemIconTint="@color/primary_blue"
-        app:itemTextColor="@color/black"
-        app:itemShapeFillColor="#1A0056D2"
-        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
-        app:itemIconPadding="24dp"
-        app:itemHorizontalPadding="16dp" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/primary_blue"
+        app:layout_anchor="@id/bottomAppBar"
+        app:layout_anchorGravity="center"
+        app:tint="@color/white"
+        app:maxImageSize="32dp"
+        app:elevation="12dp"
+        android:contentDescription="@string/add" />
 
-</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

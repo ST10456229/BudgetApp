@@ -5,5 +5,6 @@ data class Goal(
     val name: String = "",
     val targetAmount: Double = 0.0,
     val currentAmount: Double = 0.0,
-    val targetDate: String = ""
+    val targetDate: String = "",
+    val imageUrl: String = ""
 )

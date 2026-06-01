@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "398059372676",
-    "project_id": "budget-app-dc877",
-    "storage_bucket": "budget-app-dc877.firebasestorage.app"
+    "project_number": "946227184570",
+    "project_id": "budgetapp2-6ab44",
+    "storage_bucket": "budgetapp2-6ab44.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398059372676:android:659e665bce797c2a7982d1",
+        "mobilesdk_app_id": "1:946227184570:android:b9ec689658ae204ddd1383",
         "android_client_info": {
           "package_name": "com.example.budget_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "946227184570-p3eo0lgtu9v9o7ucbifglbm05m0v1271.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCmx-AmUX9IbQiwaoA9gTfK0gCX7vlJ_Ec"
+          "current_key": "AIzaSyCUfDeQMQMCC7a4VJTPojst_Kul8Jnx4aA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946227184570-p3eo0lgtu9v9o7ucbifglbm05m0v1271.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

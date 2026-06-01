@@ -1,8 +1,10 @@
 package com.example.budget_app.model
 
 data class Budget(
-    val budgetId: String = "",
-    val categoryName: String = "",
-    val amount: Double = 0.0,
-    val period: String = "Monthly"
+    var budgetId: String = "",
+    var name: String = "",
+    var targetAmount: Double = 0.0,
+    var period: String = "Monthly",
+    var minGoal: Double = 0.0,
+    var maxGoal: Double = 0.0
 )
