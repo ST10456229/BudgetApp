@@ -29,7 +29,7 @@ Performance Metrics: Track net spending, identify your top spending categories, 
 📸 Screenshots
 🚀 Welcome & Onboarding
 
-<img width="720" height="1416" alt="WhatsApp Image 2026-06-14 at 14 03 32 (1)" src="https://github.com/user-attachments/assets/2dac06e0-efae-40ea-90f0-00b170f177ba" />
+<img width="720" height="800" alt="WhatsApp Image 2026-06-14 at 14 03 32 (1)" src="https://github.com/user-attachments/assets/2dac06e0-efae-40ea-90f0-00b170f177ba" />
 
 
 
