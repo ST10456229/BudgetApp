@@ -27,7 +27,6 @@ I went and changed the design up as the previous one looked "old" and "outdated"
 
 <img width="720" height="1442" alt="WhatsApp Image 2026-06-14 at 14 03 30 (1)" src="https://github.com/user-attachments/assets/99fac1d6-c52e-44ae-b7de-de57b2d42b6e" />
 
-<img width="720" height="1452" alt="WhatsApp Image 2026-06-14 at 14 03 28" src="https://github.com/user-attachments/assets/81e20d37-09ab-4a45-b64c-dd3611160743" />
 
 <img width="720" height="1437" alt="WhatsApp Image 2026-06-14 at 14 03 28 (2)" src="https://github.com/user-attachments/assets/d247ded7-90de-456b-bef2-837cf90265ff" />
 
