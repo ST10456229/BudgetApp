@@ -19,4 +19,9 @@
     </style>
 
     <style name="Theme.Budget_App" parent="Base.Theme.Budget_App" />
+
+    <style name="App.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/primary_blue</item>
+        <item name="android:alpha">0.12</item>
+    </style>
 </resources>

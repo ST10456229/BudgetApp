@@ -18,17 +18,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget_app.model.Category as CategoryModel
 import com.example.budget_app.utils.Constants
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
+import com.example.budget_app.utils.NavigationHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.io.File
@@ -44,11 +40,8 @@ class CategoryActivity : AppCompatActivity() {
     private lateinit var indicatorIncome: View
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
-    private lateinit var fabAddCategory: FloatingActionButton
     private lateinit var ivProfile: ImageView
     private lateinit var ivBack: ImageView
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
 
     private var isExpensesTabSelected = true
     private val categoryList = mutableListOf<CategoryModel>()
@@ -62,8 +55,8 @@ class CategoryActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance(Constants.DATABASE_URL)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        ViewCompat.setOnApplyWindowInsetsListener(drawerLayout) { v, insets ->
+        val rootView = findViewById<View>(android.R.id.content)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -81,10 +74,6 @@ class CategoryActivity : AppCompatActivity() {
         indicatorIncome = findViewById(R.id.indicatorIncome)
         ivProfile = findViewById(R.id.ivProfile)
         ivBack = findViewById(R.id.ivBack)
-        navView = findViewById(R.id.nav_view)
-        
-        fabAddCategory = findViewById(R.id.fabAdd)
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         ivBack.setOnClickListener { finish() }
 
@@ -92,49 +81,14 @@ class CategoryActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
-        fabAddCategory.setOnClickListener {
+        findViewById<View>(R.id.fabAdd).setOnClickListener {
             showAddCategoryDialog()
         }
 
-        setupDrawer()
-        setupBottomNav(bottomNavigation)
+        NavigationHelper.setupNavigation(this)
         setupTabs()
         fetchUserProfile()
         fetchCategories()
-    }
-
-    private fun setupDrawer() {
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish() }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish() }
-                R.id.nav_history -> { startActivity(Intent(this, TransactionHistoryActivity::class.java)); finish() }
-                R.id.nav_categories -> { drawerLayout.closeDrawer(GravityCompat.START) }
-                R.id.nav_settings -> { startActivity(Intent(this, ProfileActivity::class.java)); finish() }
-                R.id.nav_logout -> {
-                    auth.signOut()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
-    }
-
-    private fun setupBottomNav(bottomNavigation: BottomNavigationView) {
-        bottomNavigation.selectedItemId = R.id.nav_home // Ideally this would be a 'categories' ID
-        bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish(); true }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish(); true }
-                R.id.nav_history -> { startActivity(Intent(this, TransactionHistoryActivity::class.java)); finish(); true }
-                R.id.nav_more -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
-                else -> false
-            }
-        }
     }
 
     private fun fetchUserProfile() {
@@ -145,9 +99,7 @@ class CategoryActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (isFinishing) return
                 
-                val username = snapshot.child("username").getValue(String::class.java) ?: user.displayName
                 val profilePic = snapshot.child("profilePic").getValue(String::class.java)
-                val email = user.email ?: ""
 
                 if (!profilePic.isNullOrEmpty()) {
                     try {
@@ -160,27 +112,6 @@ class CategoryActivity : AppCompatActivity() {
                         }
                         ivProfile.colorFilter = null
                     } catch (e: Exception) {}
-                }
-
-                // Update Navigation Header
-                val headerView = navView.getHeaderView(0)
-                if (headerView != null) {
-                    val ivNavProfile = headerView.findViewById<ImageView>(R.id.ivNavProfile)
-                    val tvNavUsername = headerView.findViewById<TextView>(R.id.tvNavUsername)
-                    val tvNavEmail = headerView.findViewById<TextView>(R.id.tvNavEmail)
-
-                    tvNavUsername?.text = username ?: "User"
-                    tvNavEmail?.text = email
-
-                    if (!profilePic.isNullOrEmpty() && ivNavProfile != null) {
-                        try {
-                            val path = Uri.parse(profilePic).path
-                            if (path != null && File(path).exists()) {
-                                ivNavProfile.setImageBitmap(BitmapFactory.decodeFile(path))
-                                ivNavProfile.colorFilter = null
-                            }
-                        } catch (e: Exception) {}
-                    }
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
@@ -294,6 +225,7 @@ class CategoryActivity : AppCompatActivity() {
 
         customCategoriesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (isFinishing) return
                 categoryList.clear()
                 categoryList.addAll(getDefaultCategories())
 

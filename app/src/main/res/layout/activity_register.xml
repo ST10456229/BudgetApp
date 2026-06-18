@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:attr/windowBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
-    android:fillViewport="true"
-    tools:context=".activity_register">
-
+    android:fillViewport="true">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="16dp">
-
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,57 +19,47 @@
             app:cardElevation="0dp"
             app:strokeColor="?attr/strokeColor"
             app:strokeWidth="1dp">
-
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
-
-                <!-- Logo and Name -->
+                android:padding="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_home"
-                        app:tint="@color/primary_blue"
-                        android:importantForAccessibility="no" />
-
+                        android:importantForAccessibility="no"
+                        app:tint="@color/primary_blue"/>
                     <TextView
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_blue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:text="@string/app_name"
-                        android:textColor="@color/primary_blue"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="8dp"/>
                 </LinearLayout>
-
                 <TextView
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="@string/create_account"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-
+                    android:text="@string/create_account"/>
                 <TextView
+                    android:textSize="14sp"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/register_subtitle"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="14sp" />
-
-                <!-- Name Field -->
+                    android:text="@string/register_subtitle"/>
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -84,19 +69,16 @@
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     app:startIconDrawable="@drawable/ic_profile"
-                    app:startIconTint="@color/primary_blue">
-
+                    app:startIconTint="@color/primary_blue"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/registerName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:textColor="?android:attr/textColorPrimary" />
+                        android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Email Field -->
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -106,19 +88,16 @@
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     app:startIconDrawable="@drawable/ic_email"
-                    app:startIconTint="@color/primary_blue">
-
+                    app:startIconTint="@color/primary_blue"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/registerEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:textColor="?android:attr/textColorPrimary" />
+                        android:inputType="textEmailAddress"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Password Field -->
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -129,89 +108,76 @@
                     app:boxCornerRadiusTopStart="12dp"
                     app:passwordToggleEnabled="true"
                     app:startIconDrawable="@drawable/ic_lock"
-                    app:startIconTint="@color/primary_blue">
-
+                    app:startIconTint="@color/primary_blue"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColor="?android:attr/textColorPrimary"
                         android:id="@+id/registerPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:textColor="?android:attr/textColorPrimary" />
+                        android:inputType="textPassword"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Sign Up Button -->
                 <com.google.android.material.button.MaterialButton
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:id="@+id/btnSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="32dp"
                     android:text="@string/sign_up"
                     android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="12dp" />
-
-                <!-- Login Link -->
+                    app:cornerRadius="12dp"/>
                 <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
+                    android:layout_marginTop="32dp">
                     <TextView
+                        android:textSize="14sp"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/already_have_account"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="14sp" />
-
+                        android:text="@string/already_have_account"/>
                     <TextView
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_blue"
                         android:id="@+id/tvLogin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sign_in"
-                        android:textColor="@color/primary_blue"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="@string/sign_in"/>
                 </LinearLayout>
-
-                <!-- Encryption Info -->
                 <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
+                    android:layout_marginTop="24dp">
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:layout_marginEnd="6dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="?android:attr/textColorSecondary"
-                        android:importantForAccessibility="no" />
-
+                        android:importantForAccessibility="no"
+                        android:layout_marginEnd="6dp"
+                        app:tint="?android:attr/textColorSecondary"/>
                     <TextView
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/bank_security"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:text="@string/bank_security"/>
                 </LinearLayout>
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
         <TextView
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="24dp"
-            android:text="@string/copyright"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp" />
-
+            android:text="@string/copyright"/>
     </LinearLayout>
 </ScrollView>

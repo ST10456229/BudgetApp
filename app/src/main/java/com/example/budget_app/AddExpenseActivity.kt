@@ -1,34 +1,30 @@
 package com.example.budget_app
 
 import android.app.DatePickerDialog
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.example.budget_app.model.Account
 import com.example.budget_app.model.Category
 import com.example.budget_app.model.Transaction
 import com.example.budget_app.utils.Constants
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
+import com.example.budget_app.utils.GamificationManager
+import com.example.budget_app.utils.NavigationHelper
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import java.io.File
-import java.io.FileOutputStream
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 class AddExpenseActivity : AppCompatActivity() {
@@ -38,23 +34,23 @@ class AddExpenseActivity : AppCompatActivity() {
     private lateinit var spinnerCategory: MaterialAutoCompleteTextView
     private lateinit var spinnerAccount: MaterialAutoCompleteTextView
     private lateinit var etDate: TextInputEditText
-    private lateinit var btnSelectImage: MaterialButton
+    private lateinit var btnSelectImage: Button
     private lateinit var ivReceiptPreview: ImageView
-    private lateinit var btnSaveExpense: MaterialButton
+    private lateinit var btnSaveExpense: Button
     private lateinit var toggleTransactionType: MaterialButtonToggleGroup
-    private lateinit var ivProfile: ImageView
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
     
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var gamificationManager: GamificationManager
 
     private val accountList = mutableListOf<Account>()
-    private var internalReceiptUri: String = ""
-    private val TAG = "AddExpenseActivity"
+    private var selectedAccountId: String? = null
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let { handleReceiptSelection(it) }
+        uri?.let {
+            ivReceiptPreview.setImageURI(it)
+            ivReceiptPreview.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +59,9 @@ class AddExpenseActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance(Constants.DATABASE_URL)
+        gamificationManager = GamificationManager.getInstance(this)
 
-        // Bind UI components
+        // Initialize UI components
         etAmount = findViewById(R.id.etAmount)
         etDescription = findViewById(R.id.etDescription)
         spinnerCategory = findViewById(R.id.spinnerCategory)
@@ -74,293 +71,159 @@ class AddExpenseActivity : AppCompatActivity() {
         ivReceiptPreview = findViewById(R.id.ivReceiptPreview)
         btnSaveExpense = findViewById(R.id.btnSaveExpense)
         toggleTransactionType = findViewById(R.id.toggleTransactionType)
-        ivProfile = findViewById(R.id.ivProfile)
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navView = findViewById(R.id.nav_view)
-        
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        findViewById<View>(R.id.ivMenu).setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
+
+        // Setup Categories
+        val categories = arrayOf("Food", "Transport", "Bills", "Shopping", "Entertainment", "Salary", "Gift", "Other")
+        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories)
+        spinnerCategory.setAdapter(categoryAdapter)
+
+        // Setup Accounts
+        setupAccountSpinner()
+
+        // Date Picker
+        etDate.setOnClickListener {
+            showDatePicker()
         }
 
-        // Initialize with default states to ensure they are clickable immediately
-        spinnerAccount.setSimpleItems(arrayOf("Loading accounts..."))
-        spinnerCategory.setSimpleItems(arrayOf("Food", "Transport", "Bills", "Shopping", "Entertainment", "Health", "Other"))
-
-        // Explicit click listeners for better responsiveness in ExposedDropdownMenu
-        spinnerAccount.setOnClickListener { spinnerAccount.showDropDown() }
-        spinnerCategory.setOnClickListener { spinnerCategory.showDropDown() }
-
-        // Handle item selection (e.g., navigating to Add Account)
-        spinnerAccount.setOnItemClickListener { parent, _, position, _ ->
-            val selection = parent.getItemAtPosition(position).toString()
-            if (selection == "Add Account +") {
-                spinnerAccount.setText("", false)
-                startActivity(Intent(this, AddAccountActivity::class.java))
-            }
-        }
-
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish() }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish() }
-                R.id.nav_history -> { startActivity(Intent(this, TransactionHistoryActivity::class.java)); finish() }
-                R.id.nav_categories -> { startActivity(Intent(this, CategoryActivity::class.java)); finish() }
-                R.id.nav_goals -> { startActivity(Intent(this, CreateGoalActivity::class.java)); finish() }
-                R.id.nav_settings -> { startActivity(Intent(this, ProfileActivity::class.java)); finish() }
-                R.id.nav_logout -> {
-                    auth.signOut()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
-
-        fetchAccounts()
-        setupCategories()
-        fetchUserProfile()
-
-        etDate.setOnClickListener { showDatePicker() }
+        // Set click listener for Save Button
         btnSaveExpense.setOnClickListener {
-            saveTransaction() 
+            saveExpense()
         }
-        btnSelectImage.setOnClickListener { pickImageLauncher.launch("image/*") }
-        ivProfile.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
 
-        bottomNavigation.selectedItemId = R.id.nav_history
-        bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish(); true }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish(); true }
-                R.id.nav_history -> true
-                R.id.nav_more -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
-                else -> false
-            }
+        // Make Image Selection functional
+        btnSelectImage.setOnClickListener {
+            pickImageLauncher.launch("image/*")
         }
-        
-        // Default date to today
-        val calendar = Calendar.getInstance()
-        etDate.setText(String.format(Locale.US, "%02d/%02d/%d", 
-            calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)))
+
+        NavigationHelper.setupNavigation(this)
     }
 
-    private fun handleReceiptSelection(uri: Uri) {
-        try {
-            val inputStream = contentResolver.openInputStream(uri)
-            val file = File(filesDir, "receipt_${System.currentTimeMillis()}.jpg")
-            val outputStream = FileOutputStream(file)
-            inputStream?.use { input -> outputStream.use { output -> input.copyTo(output) } }
-            internalReceiptUri = Uri.fromFile(file).toString()
-            ivReceiptPreview.setImageURI(Uri.parse(internalReceiptUri))
-            ivReceiptPreview.visibility = View.VISIBLE
-        } catch (e: Exception) {
-            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun fetchUserProfile() {
-        val user = auth.currentUser ?: return
-        database.getReference(Constants.PATH_USERS).child(user.uid).child(Constants.PATH_PROFILE)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (isFinishing) return
-                    val username = snapshot.child("username").getValue(String::class.java) ?: user.displayName
-                    val profilePic = snapshot.child("profilePic").getValue(String::class.java)
-                    val email = user.email ?: ""
-
-                    if (!profilePic.isNullOrEmpty()) {
-                        loadProfileImage(profilePic, ivProfile)
-                    }
-
-                    val headerView = navView.getHeaderView(0)
-                    if (headerView != null) {
-                        val ivNavProfile = headerView.findViewById<ImageView>(R.id.ivNavProfile)
-                        val tvNavUsername = headerView.findViewById<TextView>(R.id.tvNavUsername)
-                        val tvNavEmail = headerView.findViewById<TextView>(R.id.tvNavEmail)
-                        tvNavUsername?.text = username ?: "User"
-                        tvNavEmail?.text = email
-                        if (!profilePic.isNullOrEmpty() && ivNavProfile != null) {
-                            loadProfileImage(profilePic, ivNavProfile)
-                        }
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {}
-            })
-    }
-
-    private fun loadProfileImage(profilePic: String, imageView: ImageView) {
-        try {
-            val uri = Uri.parse(profilePic)
-            val path = uri.path
-            if (path != null && File(path).exists()) {
-                val bitmap = BitmapFactory.decodeFile(path)
-                imageView.setImageBitmap(bitmap)
-            } else {
-                imageView.setImageURI(uri)
-            }
-            imageView.colorFilter = null
-        } catch (e: Exception) {
-            Log.e(TAG, "Error loading profile pic")
-        }
-    }
-
-    private fun fetchAccounts() {
+    private fun setupAccountSpinner() {
         val userId = auth.currentUser?.uid ?: return
         database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (isFinishing) return
                     accountList.clear()
-                    val names = mutableListOf<String>()
-                    
-                    if (snapshot.exists()) {
-                        for (data in snapshot.children) {
-                            val account = data.getValue(Account::class.java)
-                            if (account != null) {
-                                val accWithId = account.copy(accountId = data.key ?: "")
-                                accountList.add(accWithId)
-                                names.add(account.name)
-                            }
-                        }
-                    }
-                    
-                    if (names.isEmpty()) {
-                        names.add("Add Account +")
-                    }
-                    
-                    // setSimpleItems is optimized for Material3 Exposed Dropdowns
-                    spinnerAccount.setSimpleItems(names.toTypedArray())
-                    
-                    // Auto-select the first actual account if one exists and nothing is selected
-                    if (accountList.isNotEmpty() && spinnerAccount.text.isEmpty()) {
-                        spinnerAccount.setText(accountList[0].name, false)
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@AddExpenseActivity, "Database Error: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-    private fun setupCategories() {
-        val userId = auth.currentUser?.uid ?: return
-
-        // Start with defaults immediately
-        val categoryNames = mutableListOf(
-            "Food", "Transport", "Bills", "Shopping", "Entertainment", "Health", "Other"
-        )
-
-        // Create ONE adapter and reuse it
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categoryNames)
-        spinnerCategory.setAdapter(adapter)
-
-        database.getReference(Constants.PATH_USERS)
-            .child(userId)
-            .child(Constants.PATH_CUSTOM_CATEGORIES)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (isFinishing) return
-
-                    // Reset to defaults, then append custom ones
-                    categoryNames.clear()
-                    categoryNames.addAll(
-                        listOf("Food", "Transport", "Bills", "Shopping", "Entertainment", "Health", "Other")
-                    )
-
+                    val accountNames = mutableListOf<String>()
                     for (data in snapshot.children) {
-                        val catName = data.child("category_name").getValue(String::class.java)
-                        if (!catName.isNullOrBlank() && !categoryNames.contains(catName)) {
-                            categoryNames.add(catName)
+                        val account = data.getValue(Account::class.java)
+                        if (account != null) {
+                            accountList.add(account)
+                            accountNames.add("${account.name} (R${String.format("%.2f", account.balance)})")
                         }
                     }
-
-                    // Notify the existing adapter instead of replacing it
-                    adapter.notifyDataSetChanged()
+                    val adapter = ArrayAdapter(this@AddExpenseActivity, android.R.layout.simple_dropdown_item_1line, accountNames)
+                    spinnerAccount.setAdapter(adapter)
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "Failed to load categories: ${error.message}")
-                }
+                override fun onCancelled(error: DatabaseError) {}
             })
+
+        spinnerAccount.setOnItemClickListener { _, _, position, _ ->
+            selectedAccountId = accountList[position].accountId
+        }
     }
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(this, { _, year, month, day ->
-            etDate.setText(String.format(Locale.US, "%02d/%02d/%d", day, month + 1, year))
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+            val date = String.format(Locale.US, "%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear)
+            etDate.setText(date)
+        }, year, month, day)
+
         datePickerDialog.show()
     }
 
-    private fun saveTransaction() {
+    private fun saveExpense() {
         val amountStr = etAmount.text.toString().trim()
         val description = etDescription.text.toString().trim()
         val categoryName = spinnerCategory.text.toString()
-        val accountName = spinnerAccount.text.toString()
         val date = etDate.text.toString().trim()
         val isIncome = toggleTransactionType.checkedButtonId == R.id.btnIncome
+        val accountName = spinnerAccount.text.toString()
 
-        if (amountStr.isEmpty() || categoryName.isEmpty() || accountName.isEmpty() || date.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        // Validation
+        if (amountStr.isEmpty()) {
+            etAmount.error = "Please enter an amount"
+            return
+        }
+
+        if (description.isEmpty()) {
+            etDescription.error = "Please enter a description"
+            return
+        }
+        
+        if (categoryName.isEmpty()) {
+            spinnerCategory.error = "Please select a category"
+            return
+        }
+
+        if (accountName.isEmpty() || selectedAccountId == null) {
+            spinnerAccount.error = "Please select an account"
+            return
+        }
+
+        if (date.isEmpty()) {
+            etDate.error = "Please select a date"
             return
         }
 
         val amount = amountStr.toDoubleOrNull() ?: 0.0
-        if (amount <= 0) {
-            Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val selectedAccount = accountList.find { it.name == accountName }
-        if (selectedAccount == null && accountName != "Add Account +") {
-             Toast.makeText(this, "Please select a valid account", Toast.LENGTH_SHORT).show()
-             return
-        }
+        val finalAmount = if (isIncome) Math.abs(amount) else -Math.abs(amount)
         
-        if (accountName == "Add Account +") {
-            Toast.makeText(this, "Please add and select an account first", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val userId = auth.currentUser?.uid ?: run {
-            Toast.makeText(this, "User session expired. Re-login required.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        btnSaveExpense.isEnabled = false
+        val userId = auth.currentUser?.uid ?: return
         val transRef = database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_TRANSACTIONS).push()
 
         val transaction = Transaction(
             transactionId = transRef.key ?: "",
-            transaction_name = if (description.isEmpty()) categoryName else description,
-            category = Category(category_name = categoryName, type = if (isIncome) "Income" else "Expense"),
-            transaction_amount = if (isIncome) amount else -amount,
+            transaction_name = description,
+            category = Category(category_name = categoryName),
+            transaction_amount = finalAmount,
             transaction_date = date,
-            imageUrl = internalReceiptUri,
-            accountId = selectedAccount?.accountId ?: ""
+            transaction_type = if (isIncome) "Income" else "Expense",
+            accountId = selectedAccountId ?: ""
         )
 
         transRef.setValue(transaction).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                selectedAccount?.let { updateAccountBalance(it, if (isIncome) amount else -amount) }
-                Toast.makeText(this, "Transaction Saved Successfully!", Toast.LENGTH_SHORT).show()
+                // Update account balance
+                updateAccountBalance(userId, selectedAccountId!!, finalAmount)
+                
+                // Trigger gamification logic
+                gamificationManager.onTransactionAdded()
+                
+                val type = if (isIncome) "Income" else "Expense"
+                Toast.makeText(this, "$type Saved Successfully", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                btnSaveExpense.isEnabled = true
-                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun updateAccountBalance(account: Account, amountChange: Double) {
-        val userId = auth.currentUser?.uid ?: return
-        val newBalance = account.balance + amountChange
-        database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS)
-            .child(account.accountId).child("balance").setValue(newBalance)
+    private fun updateAccountBalance(userId: String, accountId: String, amountChange: Double) {
+        val accountRef = database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS).child(accountId)
+        accountRef.runTransaction(object : com.google.firebase.database.Transaction.Handler {
+            override fun doTransaction(currentData: com.google.firebase.database.MutableData): com.google.firebase.database.Transaction.Result {
+                val account = currentData.getValue(Account::class.java)
+                if (account != null) {
+                    account.balance += amountChange
+                    currentData.value = account
+                }
+                return com.google.firebase.database.Transaction.success(currentData)
+            }
+
+            override fun onComplete(error: DatabaseError?, committed: Boolean, snapshot: DataSnapshot?) {
+                if (error != null) {
+                    Log.e("AddExpense", "Balance update failed: ${error.message}")
+                }
+            }
+        })
     }
 }

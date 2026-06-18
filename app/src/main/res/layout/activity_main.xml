@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:attr/windowBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/main_scroll_view"
@@ -18,7 +17,6 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
 
-            <!-- Top Header -->
             <TextView
                 android:id="@+id/tvGreeting"
                 android:layout_width="0dp"
@@ -28,32 +26,122 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/ivProfile"
-                app:layout_constraintEnd_toStartOf="@id/ivProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintEnd_toStartOf="@+id/llStreakLevel"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivProfile" />
+                app:layout_constraintTop_toTopOf="@+id/ivProfile" />
+
+            <LinearLayout
+                android:id="@+id/llStreakLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintEnd_toStartOf="@+id/ivProfile"
+                app:layout_constraintTop_toTopOf="@+id/ivProfile">
+
+                <TextView
+                    android:id="@+id/tvStreakCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔥 0"
+                    android:textColor="#ff9800"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvLevelDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="lvl: 1"
+                    android:textColor="@color/primary_blue"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
+                android:contentDescription="@string/profile"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.LargeComponent"
-                android:contentDescription="@string/profile" />
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.LargeComponent" />
 
-            <!-- Main Balance Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvLevelInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile"
+                app:strokeColor="?attr/strokeColor"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvLevelTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⭐ Level 1: Budget Rookie"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvXPProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="0/100 XP"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/levelProgressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:progress="0"
+                        app:indicatorColor="@color/primary_blue"
+                        app:trackColor="#e0e0e0"
+                        app:trackCornerRadius="4dp"
+                        app:trackThickness="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cvMainBalance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/primary_blue"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="8dp"
-                app:layout_constraintTop_toBottomOf="@id/ivProfile"
+                app:layout_constraintTop_toBottomOf="@+id/cvLevelInfo"
                 app:strokeWidth="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,7 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/total_balance"
-                        android:textColor="#CCFFFFFF"
+                        android:textColor="#ccffffff"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -81,7 +169,7 @@
                         android:textSize="32sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvCurrencyLabel" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvCurrencyLabel" />
 
                     <TextView
                         android:id="@+id/tvLastUpdated"
@@ -89,35 +177,34 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="@string/last_updated_now"
-                        android:textColor="#99FFFFFF"
+                        android:textColor="#99ffffff"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvTotalBalance" />
-
+                        app:layout_constraintTop_toBottomOf="@+id/tvTotalBalance" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quick Actions -->
             <LinearLayout
                 android:id="@+id/llQuickActions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:baselineAligned="false"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:baselineAligned="false"
-                app:layout_constraintTop_toBottomOf="@id/cvMainBalance">
+                app:layout_constraintTop_toBottomOf="@+id/cvMainBalance">
 
                 <LinearLayout
                     android:id="@+id/btnHistory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="56dp"
                         android:layout_height="56dp"
@@ -126,14 +213,16 @@
                         app:cardElevation="2dp"
                         app:strokeColor="?attr/strokeColor"
                         app:strokeWidth="1dp">
+
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/history"
                             android:src="@drawable/ic_history"
-                            app:tint="@color/primary_blue"
-                            android:contentDescription="@string/history" />
+                            app:tint="@color/primary_blue" />
                     </com.google.android.material.card.MaterialCardView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,11 +237,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="56dp"
                         android:layout_height="56dp"
@@ -161,14 +251,16 @@
                         app:cardElevation="2dp"
                         app:strokeColor="?attr/strokeColor"
                         app:strokeWidth="1dp">
+
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/add_account_title"
                             android:src="@drawable/ic_add"
-                            app:tint="@color/primary_blue"
-                            android:contentDescription="@string/add_account_title" />
+                            app:tint="@color/primary_blue" />
                     </com.google.android.material.card.MaterialCardView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -183,11 +275,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="56dp"
                         android:layout_height="56dp"
@@ -196,14 +289,16 @@
                         app:cardElevation="2dp"
                         app:strokeColor="?attr/strokeColor"
                         app:strokeWidth="1dp">
+
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/your_accounts"
                             android:src="@drawable/ic_categories"
-                            app:tint="@color/primary_blue"
-                            android:contentDescription="@string/your_accounts" />
+                            app:tint="@color/primary_blue" />
                     </com.google.android.material.card.MaterialCardView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -218,11 +313,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="56dp"
                         android:layout_height="56dp"
@@ -231,14 +327,16 @@
                         app:cardElevation="2dp"
                         app:strokeColor="?attr/strokeColor"
                         app:strokeWidth="1dp">
+
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/more"
                             android:src="@drawable/ic_reports"
-                            app:tint="@color/primary_blue"
-                            android:contentDescription="@string/more" />
+                            app:tint="@color/primary_blue" />
                     </com.google.android.material.card.MaterialCardView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -247,20 +345,17 @@
                         android:textColor="?android:attr/textColorPrimary"
                         android:textSize="12sp" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Budget & Goals Summary Section -->
             <LinearLayout
                 android:id="@+id/llBudgetGoals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:orientation="horizontal"
                 android:baselineAligned="false"
-                app:layout_constraintTop_toBottomOf="@id/llQuickActions">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/llQuickActions">
 
-                <!-- Budget Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cvBudget"
                     android:layout_width="0dp"
@@ -301,7 +396,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Goals Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cvGoals"
                     android:layout_width="0dp"
@@ -344,7 +438,6 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Savings Goals Section -->
             <TextView
                 android:id="@+id/tvGoalsTitle"
                 android:layout_width="wrap_content"
@@ -355,7 +448,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/llBudgetGoals" />
+                app:layout_constraintTop_toBottomOf="@+id/llBudgetGoals" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvGoals"
@@ -363,9 +456,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/tvGoalsTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvGoalsTitle" />
 
-            <!-- Recent Transactions Section -->
             <TextView
                 android:id="@+id/tvRecentTitle"
                 android:layout_width="wrap_content"
@@ -376,7 +468,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvGoals" />
+                app:layout_constraintTop_toBottomOf="@+id/rvGoals" />
 
             <TextView
                 android:id="@+id/tvSeeAll"
@@ -386,9 +478,9 @@
                 android:textColor="@color/primary_blue"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/tvRecentTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/tvRecentTitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvRecentTitle" />
+                app:layout_constraintTop_toTopOf="@+id/tvRecentTitle" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecentTransactions"
@@ -396,48 +488,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/tvRecentTitle"
-                tools:listitem="@layout/transaction_item" />
-
+                app:layout_constraintTop_toBottomOf="@+id/tvRecentTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+    <include
+        layout="@layout/layout_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorSurface"
-        app:fabAlignmentMode="center"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="24dp"
-        app:fabCradleVerticalOffset="12dp"
-        app:elevation="16dp">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            app:elevation="0dp"
-            app:itemIconTint="@color/primary_blue"
-            app:itemTextColor="@color/primary_blue"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_menu" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/primary_blue"
-        app:layout_anchor="@id/bottomAppBar"
-        app:layout_anchorGravity="center"
-        app:tint="@color/white"
-        app:maxImageSize="32dp"
-        app:elevation="12dp"
-        android:contentDescription="@string/add" />
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

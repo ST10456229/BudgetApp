@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
@@ -21,10 +20,10 @@
                 android:id="@+id/ivBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:contentDescription="@string/back"
                 android:padding="8dp"
                 android:src="@drawable/ic_back"
-                app:tint="?android:attr/textColorPrimary"
-                android:contentDescription="@string/back" />
+                app:tint="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/tvToolbarTitle"
@@ -36,12 +35,24 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/ivEditGoal"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="Edit Goal"
+                android:padding="8dp"
+                android:src="@drawable/ic_history"
+                app:tint="?android:attr/textColorPrimary" />
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -66,9 +77,9 @@
                         android:id="@+id/ivGoalDetailImage"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
+                        android:background="#f5f5f5"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_goals"
-                        android:background="#F5F5F5" />
+                        android:src="@drawable/ic_goals" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -82,8 +93,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="?android:attr/textColorPrimary"
                             android:textSize="24sp"
-                            android:textStyle="bold"
-                            tools:text="Saving for Car" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvGoalDetailDate"
@@ -91,8 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:textColor="?android:attr/textColorSecondary"
-                            android:textSize="14sp"
-                            tools:text="Target Date: 12/2025" />
+                            android:textSize="14sp" />
 
                         <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:id="@+id/progressGoalDetail"
@@ -100,10 +109,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             app:indicatorColor="@color/primary_blue"
-                            app:trackColor="#E0E0E0"
+                            app:trackColor="#e0e0e0"
                             app:trackCornerRadius="4dp"
-                            app:trackThickness="12dp"
-                            tools:progress="60" />
+                            app:trackThickness="12dp" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -116,8 +124,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/primary_blue"
                                 android:textSize="18sp"
-                                android:textStyle="bold"
-                                tools:text="R 6,000.00" />
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tvGoalDetailTarget"
@@ -125,10 +132,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:textColor="?android:attr/textColorSecondary"
-                                android:textSize="18sp"
-                                tools:text="of R 10,000.00" />
+                                android:textSize="18sp" />
                         </RelativeLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -188,11 +193,11 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:cornerRadius="16dp" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/layout_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

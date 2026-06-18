@@ -14,8 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.budget_app.utils.Constants
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.budget_app.utils.NavigationHelper
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -69,9 +68,6 @@ class ProfileActivity : AppCompatActivity() {
         val ivBack = findViewById<ImageView>(R.id.ivBack)
         val cvProfileImage = findViewById<com.google.android.material.card.MaterialCardView>(R.id.cvProfileImage)
         
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
-
         fetchUserData()
 
         // Back Button
@@ -116,33 +112,7 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        // Bottom Navigation Logic
-        bottomNavigation.selectedItemId = R.id.nav_more
-        bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_reports -> {
-                    startActivity(Intent(this, ReportsActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_history -> {
-                    startActivity(Intent(this, TransactionHistoryActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_more -> true
-                else -> false
-            }
-        }
-
-        fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddExpenseActivity::class.java))
-        }
+        NavigationHelper.setupNavigation(this)
     }
 
     private fun handleImageSelection(uri: Uri) {

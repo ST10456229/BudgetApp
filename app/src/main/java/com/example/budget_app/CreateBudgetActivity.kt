@@ -5,21 +5,17 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget_app.adapter.BudgetAdapter
 import com.example.budget_app.model.Budget
 import com.example.budget_app.model.Transaction
 import com.example.budget_app.utils.Constants
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.budget_app.utils.GamificationManager
+import com.example.budget_app.utils.NavigationHelper
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +28,7 @@ class CreateBudgetActivity : AppCompatActivity() {
     
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var gamificationManager: GamificationManager
 
     private lateinit var etBudgetName: MaterialAutoCompleteTextView
     private lateinit var etTargetAmount: TextInputEditText
@@ -39,9 +36,6 @@ class CreateBudgetActivity : AppCompatActivity() {
     private lateinit var btnSaveBudget: MaterialButton
     private lateinit var rvBudgets: RecyclerView
     private lateinit var ivProfile: ImageView
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
-    private lateinit var ivMenu: ImageView
     
     private val budgetList = mutableListOf<Budget>()
     private val transactionList = mutableListOf<Transaction>()
@@ -56,6 +50,7 @@ class CreateBudgetActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance(Constants.DATABASE_URL)
+        gamificationManager = GamificationManager.getInstance(this)
         
         // Initialize views
         etBudgetName = findViewById(R.id.etBudgetName)
@@ -64,13 +59,7 @@ class CreateBudgetActivity : AppCompatActivity() {
         btnSaveBudget = findViewById(R.id.btnSaveBudget)
         rvBudgets = findViewById(R.id.rvBudgets)
         ivProfile = findViewById(R.id.ivProfile)
-        ivMenu = findViewById(R.id.ivMenu)
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navView = findViewById(R.id.nav_view)
         
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
-
         // Setup Budget Tracker RecyclerView
         rvBudgets.layoutManager = LinearLayoutManager(this)
         budgetAdapter = BudgetAdapter(budgetList, spentMap)
@@ -78,34 +67,12 @@ class CreateBudgetActivity : AppCompatActivity() {
 
         setupDropdowns()
         fetchUserProfile()
-        setupClickListeners(fabAdd, bottomNavigation)
+        setupClickListeners()
+        NavigationHelper.setupNavigation(this)
         fetchData()
     }
 
-    private fun setupClickListeners(fabAdd: FloatingActionButton, bottomNavigation: BottomNavigationView) {
-        ivMenu.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish() }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish() }
-                R.id.nav_history -> { startActivity(Intent(this, TransactionHistoryActivity::class.java)); finish() }
-                R.id.nav_categories -> { startActivity(Intent(this, CategoryActivity::class.java)); finish() }
-                R.id.nav_settings -> { startActivity(Intent(this, ProfileActivity::class.java)); finish() }
-                R.id.nav_logout -> {
-                    auth.signOut()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
-
+    private fun setupClickListeners() {
         btnSaveBudget.setOnClickListener { 
             saveBudget() 
         }
@@ -114,19 +81,8 @@ class CreateBudgetActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java)) 
         }
 
-        bottomNavigation.selectedItemId = R.id.nav_more
-        bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> { startActivity(Intent(this, MainActivity::class.java)); finish(); true }
-                R.id.nav_reports -> { startActivity(Intent(this, ReportsActivity::class.java)); finish(); true }
-                R.id.nav_history -> { startActivity(Intent(this, TransactionHistoryActivity::class.java)); finish(); true }
-                R.id.nav_more -> true
-                else -> false
-            }
-        }
-
-        fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddExpenseActivity::class.java))
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+            finish()
         }
     }
 
@@ -173,24 +129,10 @@ class CreateBudgetActivity : AppCompatActivity() {
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (isFinishing) return
-                    val username = snapshot.child("username").getValue(String::class.java) ?: user.displayName
                     val profilePic = snapshot.child("profilePic").getValue(String::class.java)
-                    val email = user.email ?: ""
 
                     if (!profilePic.isNullOrEmpty()) {
                         loadProfileImage(profilePic, ivProfile)
-                    }
-
-                    val headerView = navView.getHeaderView(0)
-                    if (headerView != null) {
-                        val ivNavProfile = headerView.findViewById<ImageView>(R.id.ivNavProfile)
-                        val tvNavUsername = headerView.findViewById<TextView>(R.id.tvNavUsername)
-                        val tvNavEmail = headerView.findViewById<TextView>(R.id.tvNavEmail)
-                        tvNavUsername?.text = username ?: "User"
-                        tvNavEmail?.text = email
-                        if (!profilePic.isNullOrEmpty() && ivNavProfile != null) {
-                            loadProfileImage(profilePic, ivNavProfile)
-                        }
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {}
@@ -329,6 +271,9 @@ class CreateBudgetActivity : AppCompatActivity() {
         budgetRef.setValue(budget).addOnCompleteListener { task ->
             btnSaveBudget.isEnabled = true
             if (task.isSuccessful) {
+                // Trigger gamification
+                gamificationManager.onBudgetCreated()
+                
                 Toast.makeText(this, if (existingBudget != null) "Budget Updated!" else "Budget Created!", Toast.LENGTH_SHORT).show()
                 etBudgetName.setText("", false)
                 etTargetAmount.setText("")

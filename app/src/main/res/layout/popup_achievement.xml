@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:strokeColor="@color/primary_blue"
+    app:strokeWidth="2dp">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="32sp"
+            android:gravity="center"
+            android:id="@+id/tvBadgeEmoji"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="��"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp">
+            <TextView
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACHIEVEMENT UNLOCKED!"/>
+            <TextView
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:id="@+id/tvBadgeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Step"/>
+            <TextView
+                android:textSize="14sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:id="@+id/tvBadgeDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add your first transaction"/>
+        </LinearLayout>
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:id="@+id/tvXPReward"
+            android:background="@drawable/bg_xp_chip"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+50 XP"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

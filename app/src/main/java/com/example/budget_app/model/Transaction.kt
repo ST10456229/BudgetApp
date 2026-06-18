@@ -6,6 +6,8 @@ data class Transaction(
     val category: Category = Category(),
     val transaction_amount: Double = 0.0,
     val transaction_date: String = "",
+    val transaction_type: String = "Expense",
     val imageUrl: String = "",
-    val accountId: String = ""
+    val accountId: String = "",
+    val timestamp: Long = System.currentTimeMillis()
 )

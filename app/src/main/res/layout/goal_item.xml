@@ -1,92 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="24dp"
     app:cardElevation="4dp"
     app:strokeColor="?attr/strokeColor"
     app:strokeWidth="1dp">
-
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/ivGoalImage"
+            android:background="#f5f5f5"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/ic_goals"
-            android:background="#F5F5F5"
-            android:importantForAccessibility="no" />
-
+            android:scaleType="centerCrop"
+            android:importantForAccessibility="no"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <TextView
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:id="@+id/tvGoalName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="New Car"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
+                    android:layout_height="wrap_content"/>
                 <TextView
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:id="@+id/tvGoalDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    tools:text="By 12/2025"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="12sp" />
+                    android:layout_alignParentEnd="true"/>
             </RelativeLayout>
-
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progressGoal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                tools:progress="45"
                 app:indicatorColor="@color/primary_blue"
-                app:trackColor="#E0E0E0"
+                app:trackColor="#e0e0e0"
                 app:trackCornerRadius="4dp"
-                app:trackThickness="8dp" />
-
+                app:trackThickness="8dp"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp">
-
                 <TextView
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_blue"
                     android:id="@+id/tvCurrentAmount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="R 4,500"
-                    android:textColor="@color/primary_blue"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
+                    android:layout_height="wrap_content"/>
                 <TextView
+                    android:textSize="14sp"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:id="@+id/tvTargetAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    tools:text="of R 10,000"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="14sp" />
+                    android:layout_alignParentEnd="true"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

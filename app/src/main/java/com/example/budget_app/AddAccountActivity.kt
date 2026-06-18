@@ -1,13 +1,14 @@
 package com.example.budget_app
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.budget_app.model.Account
 import com.example.budget_app.utils.Constants
+import com.example.budget_app.utils.NavigationHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
@@ -20,12 +21,12 @@ class AddAccountActivity : AppCompatActivity() {
     private lateinit var etBalance: TextInputEditText
     private lateinit var spinnerAccountType: MaterialAutoCompleteTextView
     private lateinit var btnSaveAccount: MaterialButton
+    private lateinit var tvTitle: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
-    
-    private var isEditMode = false
+
+    private var isEdit = false
     private var accountId: String? = null
-    private val TAG = "AddAccountActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,30 +39,30 @@ class AddAccountActivity : AppCompatActivity() {
         etBalance = findViewById(R.id.etBalance)
         spinnerAccountType = findViewById(R.id.spinnerAccountType)
         btnSaveAccount = findViewById(R.id.btnSaveAccount)
-        val ivBack: ImageView = findViewById(R.id.ivBack)
+        tvTitle = findViewById(R.id.tvTitle)
 
-        ivBack.setOnClickListener { finish() }
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
 
-        val types = arrayOf("Cash", "Bank Account", "Credit Card", "Savings", "Investment", "Other")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, types)
+        val types = arrayOf("Savings", "Cheque", "Credit Card", "Wallet", "Other")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, types)
         spinnerAccountType.setAdapter(adapter)
 
-        spinnerAccountType.setOnClickListener {
-            spinnerAccountType.showDropDown()
-        }
-
-        isEditMode = intent.getBooleanExtra("IS_EDIT", false)
-        if (isEditMode) {
+        // Check if we are editing
+        isEdit = intent.getBooleanExtra("IS_EDIT", false)
+        if (isEdit) {
             accountId = intent.getStringExtra("ACCOUNT_ID")
             etAccountName.setText(intent.getStringExtra("ACCOUNT_NAME"))
             etBalance.setText(intent.getDoubleExtra("ACCOUNT_BALANCE", 0.0).toString())
             spinnerAccountType.setText(intent.getStringExtra("ACCOUNT_TYPE"), false)
-            btnSaveAccount.text = getString(R.string.update_account)
+            tvTitle.text = "Edit Account"
+            btnSaveAccount.text = "Update Account"
         }
 
         btnSaveAccount.setOnClickListener {
             saveAccount()
         }
+
+        NavigationHelper.setupNavigation(this)
     }
 
     private fun saveAccount() {
@@ -74,19 +75,14 @@ class AddAccountActivity : AppCompatActivity() {
             return
         }
 
-        val balance = balanceStr.toDoubleOrNull()
-        if (balance == null) {
-            Toast.makeText(this, "Invalid balance number", Toast.LENGTH_SHORT).show()
-            return
-        }
-
+        val balance = balanceStr.toDoubleOrNull() ?: 0.0
         val userId = auth.currentUser?.uid ?: return
         
-        btnSaveAccount.isEnabled = false
-        val accountRef = if (isEditMode && accountId != null) {
-            database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS).child(accountId!!)
+        val accountsRef = database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS)
+        val accountRef = if (isEdit && accountId != null) {
+            accountsRef.child(accountId!!)
         } else {
-            database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_ACCOUNTS).push()
+            accountsRef.push()
         }
 
         val account = Account(
@@ -97,13 +93,12 @@ class AddAccountActivity : AppCompatActivity() {
         )
 
         accountRef.setValue(account).addOnCompleteListener { task ->
-            btnSaveAccount.isEnabled = true
             if (task.isSuccessful) {
-                Toast.makeText(this, "Account Saved!", Toast.LENGTH_SHORT).show()
+                val message = if (isEdit) "Account updated successfully" else "Account added successfully"
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                Log.e(TAG, "Firebase Error: ${task.exception?.message}")
-                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Failed to save account", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -18,6 +18,8 @@
     <color name="muted_grey">#9E9E9E</color>
     <color name="soft_cream">#F5F5DC</color>
 
+    <color name="nav_inactive">#88888880</color>
+
     <!-- Dark Mode Colors -->
     <color name="dark_gray_bg">#121212</color>
     <color name="dark_card_bg">#1E1E1E</color>

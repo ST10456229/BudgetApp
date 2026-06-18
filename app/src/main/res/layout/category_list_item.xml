@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="6dp"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="6dp"
     app:cardBackgroundColor="?attr/colorSurface"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-
+        android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
             android:id="@+id/cvIconBackground"
             android:layout_width="48dp"
@@ -24,59 +24,50 @@
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:cardBackgroundColor="@color/primary_blue">
-
+            app:layout_constraintTop_toTopOf="parent">
             <ImageView
+                android:layout_gravity="center"
                 android:id="@+id/ivCategoryIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center"
                 android:src="@drawable/ic_categories"
-                app:tint="@color/white"
-                android:importantForAccessibility="no" />
+                android:importantForAccessibility="no"
+                app:tint="@color/white"/>
         </androidx.cardview.widget.CardView>
-
         <TextView
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
             android:id="@+id/tvCategoryName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            tools:text="Category Name"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/ivArrow"
             app:layout_constraintStart_toEndOf="@+id/cvIconBackground"
             app:layout_constraintTop_toTopOf="@+id/cvIconBackground"
-            app:layout_constraintVertical_chainStyle="packed" />
-
+            app:layout_constraintVertical_chainStyle="packed"/>
         <TextView
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
             android:id="@+id/tvCategorySubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            tools:text="Description goes here"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/cvIconBackground"
             app:layout_constraintEnd_toEndOf="@+id/tvCategoryName"
             app:layout_constraintStart_toStartOf="@+id/tvCategoryName"
-            app:layout_constraintTop_toBottomOf="@+id/tvCategoryName" />
-
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoryName"/>
         <ImageView
             android:id="@+id/ivArrow"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:alpha="0.3"
             android:src="@drawable/ic_history"
+            android:alpha="0.3"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?android:attr/textColorPrimary"
-            android:importantForAccessibility="no" />
-
+            app:tint="?android:attr/textColorPrimary"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

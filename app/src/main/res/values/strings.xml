@@ -89,6 +89,8 @@
     <!-- Main Activity Strings -->
     <string name="menu">Menu</string>
     <string name="profile">Profile</string>
+    <string name="home">Home</string>
+    <string name="reports">Reports</string>
     <string name="hello_user">Hello, User</string>
     <string name="hello_format">Hello, %1$s</string>
     <string name="default_amount">R 0.00</string>
@@ -99,6 +101,8 @@
     <string name="my_budget">My Budget</string>
     <string name="savings_goals">Savings Goals</string>
     <string name="recent_transactions">Recent Transactions</string>
+    <string name="streak_format">🔥 %1$d</string>
+    <string name="streak_default">🔥 0</string>
 
     <!-- Profile & Settings Strings -->
     <string name="profile_settings">Profile &amp; Settings</string>

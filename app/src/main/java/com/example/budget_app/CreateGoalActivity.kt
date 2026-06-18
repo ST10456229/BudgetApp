@@ -1,20 +1,24 @@
 package com.example.budget_app
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.budget_app.model.Goal
 import com.example.budget_app.utils.Constants
+import com.example.budget_app.utils.NavigationHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -26,11 +30,14 @@ class CreateGoalActivity : AppCompatActivity() {
     private lateinit var etTargetDate: TextInputEditText
     private lateinit var ivGoalImage: ImageView
     private lateinit var btnSaveGoal: MaterialButton
+    private lateinit var tvToolbarTitle: TextView
     
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private var selectedImageUri: Uri? = null
     private var internalImageUri: String = ""
+    private var goalId: String? = null
+    private var existingGoal: Goal? = null
     
     private val TAG = "CreateGoal"
 
@@ -50,6 +57,9 @@ class CreateGoalActivity : AppCompatActivity() {
         etTargetDate = findViewById(R.id.etTargetDate)
         ivGoalImage = findViewById(R.id.ivGoalImage)
         btnSaveGoal = findViewById(R.id.btnSaveGoal)
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitle)
+
+        goalId = intent.getStringExtra("GOAL_ID")
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
 
@@ -59,9 +69,42 @@ class CreateGoalActivity : AppCompatActivity() {
 
         etTargetDate.setOnClickListener { showDatePicker() }
 
+        if (goalId != null) {
+            tvToolbarTitle.text = "Edit Goal"
+            btnSaveGoal.text = "Update Goal"
+            fetchGoalData()
+        }
+
         btnSaveGoal.setOnClickListener {
             saveGoal()
         }
+
+        NavigationHelper.setupNavigation(this)
+    }
+
+    private fun fetchGoalData() {
+        val userId = auth.currentUser?.uid ?: return
+        database.getReference(Constants.PATH_USERS).child(userId).child(Constants.PATH_GOALS).child(goalId!!)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    existingGoal = snapshot.getValue(Goal::class.java)
+                    existingGoal?.let {
+                        etGoalName.setText(it.name)
+                        etTargetAmount.setText(it.targetAmount.toString())
+                        etTargetDate.setText(it.targetDate)
+                        if (it.imageUrl.isNotEmpty()) {
+                            try {
+                                internalImageUri = it.imageUrl
+                                ivGoalImage.setImageURI(Uri.parse(it.imageUrl))
+                                ivGoalImage.colorFilter = null
+                            } catch (e: Exception) {
+                                Log.e(TAG, "Error loading image")
+                            }
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     private fun handleImageSelection(uri: Uri) {
@@ -107,20 +150,20 @@ class CreateGoalActivity : AppCompatActivity() {
             return
         }
 
-        val user = auth.currentUser
-        if (user == null) {
-            Toast.makeText(this, "Error: Session expired. Please re-login.", Toast.LENGTH_LONG).show()
-            return
-        }
+        val user = auth.currentUser ?: return
         
         btnSaveGoal.isEnabled = false
-        val goalRef = database.getReference(Constants.PATH_USERS).child(user.uid).child(Constants.PATH_GOALS).push()
+        val goalRef = if (goalId != null) {
+            database.getReference(Constants.PATH_USERS).child(user.uid).child(Constants.PATH_GOALS).child(goalId!!)
+        } else {
+            database.getReference(Constants.PATH_USERS).child(user.uid).child(Constants.PATH_GOALS).push()
+        }
 
         val goal = Goal(
             goalId = goalRef.key ?: UUID.randomUUID().toString(),
             name = name,
             targetAmount = targetAmount,
-            currentAmount = 0.0,
+            currentAmount = existingGoal?.currentAmount ?: 0.0,
             targetDate = date,
             imageUrl = internalImageUri
         )
@@ -128,15 +171,11 @@ class CreateGoalActivity : AppCompatActivity() {
         goalRef.setValue(goal).addOnCompleteListener { task ->
             btnSaveGoal.isEnabled = true
             if (task.isSuccessful) {
-                Toast.makeText(this, "Goal Saved Successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, if (goalId != null) "Goal Updated!" else "Goal Created!", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                Log.e(TAG, "Firebase save error: ${task.exception?.message}")
                 Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
             }
-        }.addOnFailureListener { e ->
-            btnSaveGoal.isEnabled = true
-            Toast.makeText(this, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
@@ -21,20 +20,20 @@
                 android:id="@+id/ivBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:contentDescription="@string/back"
                 android:padding="8dp"
                 android:src="@drawable/ic_back"
-                app:tint="?android:attr/textColorPrimary"
-                android:contentDescription="@string/back" />
+                app:tint="?android:attr/textColorPrimary" />
 
             <TextView
+                android:id="@+id/tvToolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/create_goal_title"
+                android:text="Create Goal"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -70,9 +69,9 @@
                         android:id="@+id/ivGoalImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="Tap to upload"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_goals"
-                        android:contentDescription="@string/tap_to_upload" />
+                        android:src="@drawable/ic_goals" />
 
                     <View
                         android:layout_width="match_parent"
@@ -89,15 +88,15 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:importantForAccessibility="no"
                             android:src="@drawable/ic_add"
-                            app:tint="@color/white"
-                            android:importantForAccessibility="no" />
+                            app:tint="@color/white" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/tap_to_upload"
+                            android:text="Tap to upload"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -109,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:hint="@string/goal_name_hint"
+                android:hint="Goal Name"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -128,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="@string/target_amount"
+                android:hint="Target Amount"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -149,7 +148,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="@string/target_date"
+                android:hint="Target Date"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -169,13 +168,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/save_goal"
+                android:text="Save Goal"
                 android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:cornerRadius="16dp" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/layout_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
