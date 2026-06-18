@@ -1,61 +1,176 @@
+# BudgetTracker 📊
 
-BudgetTracker 📊
-Money Made Easy
+> **Money Made Easy**
 
-Take control of your financial future with smart insights and effortless tracking designed for your lifestyle.
+Take control of your financial future with smart insights and effortless expense tracking designed for your lifestyle.
 
-✨ Features
-🏦 Account Management
-Centralized Dashboard: View your total income, expenses, and estimated savings at a glance.
+---
 
-Multiple Wallets: Connect your bank accounts or digital wallets to track finances across different platforms.
+## ✨ Features
 
-Bank-Grade Security: Your data is protected with 256-bit encryption.
+### 🏦 Account Management
 
-💸 Expense & Budget Tracking
-Quick Entry: Add new expenses on the go with descriptions and categories.
+* **Centralized Dashboard** — View your total income, expenses, and estimated savings at a glance.
+* **Multiple Wallets** — Connect bank accounts or digital wallets to track finances across different platforms.
+* **Bank-Grade Security** — Your financial data is protected with 256-bit encryption.
 
-Receipt Uploads: Attach images of your receipts for better record-keeping.
+### 💸 Expense & Budget Tracking
 
-Custom Categories: Organize your transactions with personalized categories for both income and expenses.
+* **Quick Entry** — Add expenses in seconds with descriptions and categories.
+* **Receipt Uploads** — Attach receipt images for better record-keeping.
+* **Custom Categories** — Organize income and expenses using personalized categories.
+* **Budget Goals** — Set monthly spending limits and stay on track.
 
-Budgeting Goals: Set monthly targets for specific categories to ensure you stay within your limits.
+### 📈 Reports & Analytics
 
-📈 Reports & Analytics
-Visual Spending: View spending trends over time with interactive charts (Weekly/Monthly).
+* **Visual Spending Insights** — Analyze weekly and monthly spending trends with interactive charts.
+* **Performance Metrics** — Monitor net spending, identify top expense categories, and view forecasted spending.
 
-Performance Metrics: Track net spending, identify your top spending categories, and see forecasted spending based on current habits.
+---
 
-📸 Screenshots
-🚀 Welcome & Onboarding
+## 📱 App Screenshots
 
-<img width="230" height="405" alt="BudgetOutSplash" src="https://github.com/user-attachments/assets/befc54e8-fbb0-4d56-b245-61199624cd7d" />
-<img width="277" height="490" alt="budgetoutregister" src="https://github.com/user-attachments/assets/a92a5001-7d20-4b9f-82a5-2579458703af" />
-<img width="276" height="483" alt="budgetoutlogin" src="https://github.com/user-attachments/assets/ebeea3e4-a318-4f1d-b793-30a11e54ee66" />
+### 🚀 Welcome & Onboarding
 
-🏠 Dashboard & Navigation
-<img width="271" height="486" alt="budgetoutmain" src="https://github.com/user-attachments/assets/be1fd67a-5449-4bcf-a10c-0b52dd0dcdd1" />
-<img width="205" height="363" alt="budgetoutmain2" src="https://github.com/user-attachments/assets/10866d62-030b-447e-bad0-7d3e35cd34e5" />
-<img width="280" height="493" alt="budgetoutcreatebudget" src="https://github.com/user-attachments/assets/516a821a-ecf4-4bc2-886b-bf394f074e54" />
-<img width="266" height="490" alt="budgetoutaddaccount" src="https://github.com/user-attachments/assets/9c847077-414c-4bb6-ac3a-5cbaa522a22f" />
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/2dac06e0-efae-40ea-90f0-00b170f177ba" width="240" alt="Welcome Screen"/>
+      <br><sub>Welcome Screen</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/23a3a29a-777a-43cd-90c2-2dcb986c5870" width="240" alt="Onboarding"/>
+      <br><sub>Onboarding</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/f616e05b-1aa8-4049-8aeb-130ce2436f3a" width="240" alt="Get Started"/>
+      <br><sub>Get Started</sub>
+    </td>
+  </tr>
+</table>
 
+### 🔐 Authentication
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/45ab0c8e-abf7-4a59-94c8-4a66d3747b46" width="240" alt="Sign In"/>
+      <br><sub>Sign In</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/ed2005c0-58f2-474d-968a-0e1ab76e2ee7" width="240" alt="Create Account"/>
+      <br><sub>Create Account</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/99e0eb5a-38a3-4cdd-9ac2-d33a5b63c38c" width="240" alt="Forgot Password"/>
+      <br><sub>Password Recovery</sub>
+    </td>
+  </tr>
+</table>
 
-⚙️ Management Tools
-<img width="279" height="490" alt="budgetoutcategory" src="https://github.com/user-attachments/assets/88b533f9-5e71-4af0-86bd-0c1dffac5515" />
-<img width="206" height="367" alt="BudgetOutAddExpense" src="https://github.com/user-attachments/assets/3292fe75-ba8a-4e58-a43a-e59e1cf409f0" />
+### 🏠 Dashboard & Overview
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/6d8ee2e0-49db-45a9-a22f-220054cb11c9" width="240" alt="Dashboard"/>
+      <br><sub>Dashboard</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/028f8879-7cd4-44fb-8ad5-18592abb85d9" width="240" alt="Wallet Overview"/>
+      <br><sub>Wallet Overview</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/d7d0930a-8d77-4c44-b307-34633de883a0" width="240" alt="Financial Summary"/>
+      <br><sub>Financial Summary</sub>
+    </td>
+  </tr>
+</table>
 
-📊 Financial Insights & Categories
-<img width="274" height="486" alt="BudgetOutReport" src="https://github.com/user-attachments/assets/bee4635f-8c97-47d1-b1ba-2b0d59865511" />
-<img width="205" height="363" alt="budgetoutmain2" src="https://github.com/user-attachments/assets/2d6032f3-8350-4481-9310-775dbf6a3b7a" />
+### 💰 Transactions & Budgeting
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/99fac1d6-c52e-44ae-b7de-de57b2d42b6e" width="240" alt="Add Transaction"/>
+      <br><sub>Add Transaction</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/d247ded7-90de-456b-bef2-837cf90265ff" width="240" alt="Budget Goals"/>
+      <br><sub>Budget Goals</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/4242ec3c-769f-42a9-a104-5a659ceaa5a5" width="240" alt="Categories"/>
+      <br><sub>Custom Categories</sub>
+    </td>
+  </tr>
+</table>
 
-🛠 Tech Stack
-Language: Kotlin
+### 📊 Reports & Insights
 
-Backend: Firebase (Authentication & Data)
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/81f6157a-a939-4397-ad82-78064764b72b" width="240" alt="Analytics"/>
+      <br><sub>Spending Analytics</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/28f81054-1f8e-4121-9198-5781d0a7cb04" width="240" alt="Reports"/>
+      <br><sub>Monthly Reports</sub>
+    </td>
+  </tr>
+</table>
 
-UI Framework: XML / Material Design
+---
 
-Currency Support: South African Rand (ZAR)
+## 🛠 Tech Stack
+
+| Category           | Technology                          |
+| ------------------ | ----------------------------------- |
+| Language           | Kotlin                              |
+| Backend            | Firebase Authentication & Firestore |
+| UI                 | XML, Material Design 3              |
+| Architecture       | MVVM                                |
+| Image Storage      | Firebase Storage                    |
+| Charts & Analytics | MPAndroidChart *(if applicable)*    |
+| Currency           | South African Rand (ZAR)            |
+
+---
+
+## 🚀 Getting Started
+
+1. Clone the repository.
+2. Open the project in Android Studio.
+3. Configure your Firebase project and add the `google-services.json` file.
+4. Sync Gradle dependencies.
+5. Build and run the application.
+
+```bash
+git clone https://github.com/yourusername/BudgetTracker.git
+```
+
+---
+
+## 🎯 Future Enhancements
+
+* Recurring transactions
+* Smart spending recommendations
+* Export reports to PDF
+* Dark mode support
+* Gamification and achievement badges
+* Multi-currency support
+
+---
+
+## 🤝 Contributing
+
+Contributions, suggestions, and feature requests are welcome.
+
+Feel free to fork the project and submit a pull request.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
